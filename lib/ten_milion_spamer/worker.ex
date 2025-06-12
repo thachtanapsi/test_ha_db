@@ -23,8 +23,16 @@ defmodule TenMilionSpamer.Worker do
   end
 
   def handle_info(:do_attack, %{message: [weapon | new_state]} = state) do
-    IO.puts("Worker #{weapon} attack")
+    # IO.puts("Worker #{weapon} attack")
     # continute attack per milisecond
+    # SELECT account_id, context, active, id
+    # FROM public.black_list;
+    query = """
+    INSERT INTO black_list (account_id, context, active)
+    VALUES ($1, $2, $3)
+    RETURNING id
+    """
+    TestHaDb.Repo.query(query, ["067C123456", "context", "random"])
     Process.send_after(self(), :do_attack, 10)
     {:noreply, state |> Map.update(:message, [], fn _current -> new_state end)}
   end
