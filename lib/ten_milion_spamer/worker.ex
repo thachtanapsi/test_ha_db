@@ -27,12 +27,8 @@ defmodule TenMilionSpamer.Worker do
     # continute attack per milisecond
     # SELECT account_id, context, active, id
     # FROM public.black_list;
-    query = """
-    INSERT INTO black_list (account_id, context, active)
-    VALUES ($1, $2, $3)
-    RETURNING id
-    """
-    TestHaDb.Repo.query(query, ["067C123456", "context", "random"])
+    query = "INSERT INTO black_list (account_id, context, active) VALUES ($1, $2, $3) RETURNING id"
+    TestHaDb.Repo.query(query, ["067C123456", "context", true])
     Process.send_after(self(), :do_attack, 10)
     {:noreply, state |> Map.update(:message, [], fn _current -> new_state end)}
   end
