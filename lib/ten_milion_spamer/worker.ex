@@ -30,7 +30,7 @@ defmodule TenMilionSpamer.Worker do
     query = "INSERT INTO black_list (account_id, context, active) VALUES ($1, $2, $3)"
     result = TestHaDb.Repo.query(query, ["067C123456_#{weapon}", "c_#{weapon}", true], timeout: :infinity)
     MessageLogWriter.log("Worker #{weapon} attack #{inspect(result)}")
-    Process.send_after(self(), :do_attack, 50)
+    Process.send_after(self(), :do_attack, 100)
     {:noreply, state |> Map.update(:message, [], fn _current -> new_state end)}
   end
 
