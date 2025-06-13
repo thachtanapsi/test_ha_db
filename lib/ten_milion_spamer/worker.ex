@@ -29,7 +29,7 @@ defmodule TenMilionSpamer.Worker do
     # FROM public.black_list;
     query = "INSERT INTO black_list (account_id, context, active) VALUES ($1, $2, $3)"
     TestHaDb.Repo.query(query, ["067C123456_#{weapon}", "c_#{weapon}", true])
-    Process.send_after(self(), :do_attack, 10)
+    Process.send_after(self(), :do_attack, 50)
     {:noreply, state |> Map.update(:message, [], fn _current -> new_state end)}
   end
 
