@@ -36,8 +36,8 @@ defmodule TenMilionSpamer.Supervisor do
     |> Enum.each(fn batch ->
       batch
       |> Enum.with_index(fn element, index -> {index + 1, element} end)
-      |> Enum.each(fn {id, _message} ->
-        GenServer.cast(String.to_atom("TenMilionSpamer.Worker_#{id}"), {:store_message, "message"})
+      |> Enum.each(fn {id, message} ->
+        GenServer.cast(String.to_atom("TenMilionSpamer.Worker_#{id}"), {:store_message, message})
       end)
     end)
   end
