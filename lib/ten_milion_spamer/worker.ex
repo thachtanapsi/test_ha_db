@@ -31,6 +31,12 @@ defmodule TenMilionSpamer.Worker do
     result = TestHaDb.Repo.query_with_retry(fn ->
       TestHaDb.Repo.query(query, ["067C123456_#{weapon}", "c_#{weapon}", true], timeout: :infinity)
     end)
+    case result do
+      {:ok, %{rows: [[id]]}} ->
+        :ets.insert(:counter, {weapon, id})
+      _ ->
+        :ets.insert(:counter, {weapon, {"error", result}})
+    end
     MessageLogWriter.log("Worker #{weapon} attack #{inspect(result)}")
     Process.send_after(self(), :do_attack, 200)
     {:noreply, state |> Map.update(:message, [], fn _current -> new_state end)}

@@ -14,7 +14,7 @@ defmodule TestHaDb.Repo do
           if attempt > 1  do
             MessageLogWriter.log("retry #{attempt} success #{inspect(result)}")
           end
-          result
+          {:ok, result}
 
         {:error, %DBConnection.ConnectionError{}} = result ->
           if attempt == @max_retries do

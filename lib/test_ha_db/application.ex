@@ -7,6 +7,8 @@ defmodule TestHaDb.Application do
 
   @impl true
   def start(_type, _args) do
+    :ets.new(:counter, [:named_table, :set, :public, {:write_concurrency, true}])
+
     children = [
       # Start the Ecto repository
       {MessageLogWriter, "message_history_full.log"},
