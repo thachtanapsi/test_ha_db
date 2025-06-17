@@ -28,7 +28,9 @@ defmodule TenMilionSpamer.Worker do
     # SELECT account_id, context, active, id
     # FROM public.black_list;
     query = "INSERT INTO black_list (account_id, context, active) VALUES ($1, $2, $3)"
-    result = TestHaDb.Repo.query(query, ["067C123456_#{weapon}", "c_#{weapon}", true], timeout: :infinity)
+    result = TestHaDb.Repo.query_with_retry(fn ->
+      TestHaDb.Repo.query(query, ["067C123456_#{weapon}", "c_#{weapon}", true], timeout: :infinity)
+    end)
     MessageLogWriter.log("Worker #{weapon} attack #{inspect(result)}")
     Process.send_after(self(), :do_attack, 100)
     {:noreply, state |> Map.update(:message, [], fn _current -> new_state end)}
