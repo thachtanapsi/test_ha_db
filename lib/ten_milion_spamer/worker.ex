@@ -32,7 +32,7 @@ defmodule TenMilionSpamer.Worker do
       TestHaDb.Repo.query(query, ["067C123456_#{weapon}", "c_#{weapon}", true], timeout: :infinity)
     end)
     MessageLogWriter.log("Worker #{weapon} attack #{inspect(result)}")
-    Process.send_after(self(), :do_attack, 100)
+    Process.send_after(self(), :do_attack, 200)
     {:noreply, state |> Map.update(:message, [], fn _current -> new_state end)}
   end
 
