@@ -27,7 +27,7 @@ defmodule TenMilionSpamer.Worker do
     # continute attack per milisecond
     # SELECT account_id, context, active, id
     # FROM public.black_list;
-    query = "INSERT INTO black_list (account_id, context, active) VALUES ($1, $2, $3)"
+    query = "INSERT INTO black_list (account_id, context, active) VALUES ($1, $2, $3) returning id"
     result = TestHaDb.Repo.query_with_retry(fn ->
       TestHaDb.Repo.query(query, ["067C123456_#{weapon}", "c_#{weapon}", true], timeout: :infinity)
     end)
