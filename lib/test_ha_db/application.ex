@@ -9,7 +9,7 @@ defmodule TestHaDb.Application do
   def start(_type, _args) do
     children = [
       # Start the Ecto repository
-      {MessageLogWriter, "message_history_full.txt"},
+      {MessageLogWriter, "message_history_full.log"},
       TestHaDb.Repo,
       TenMilionSpamer.Supervisor
     ]

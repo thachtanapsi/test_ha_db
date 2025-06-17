@@ -16,13 +16,16 @@ defmodule TestHaDb.Repo do
         end
         result
       rescue
-        e in DBConnection.ConnectionError ->  # <- adjust based on error type
+        e in [DBConnection.ConnectionError, Postgrex.Error] ->  # <- adjust based on error type
           if attempt == @max_retries do
             raise e
           else
             Process.sleep(@retry_delay)
             query_with_retry(fun, attempt + 1)
           end
+
+        e ->
+          MessageLogWriter.log("error name #{inspect(e)}")
       end
     end
 end
