@@ -3,8 +3,8 @@ defmodule TestHaDb.Repo do
     otp_app: :test_ha_db,
     adapter: Ecto.Adapters.Postgres
 
-    @max_retries 5
-    @retry_delay 300  # in ms
+    @max_retries 10
+    @retry_delay 1000  # in ms
 
     def query_with_retry(fun, attempt \\ 1)
 
