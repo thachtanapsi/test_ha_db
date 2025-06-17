@@ -10,7 +10,11 @@ defmodule TestHaDb.Repo do
 
     def query_with_retry(fun, attempt) when attempt <= @max_retries do
       try do
-        fun.()
+        result = fun.()
+        if attempt > 1  do
+          MessageLogWriter.log("retry #{attempt} success #{inspect(result)}")
+        end
+        result
       rescue
         e in DBConnection.ConnectionError ->  # <- adjust based on error type
           if attempt == @max_retries do
