@@ -13,7 +13,6 @@ defmodule TestHaDb.Repo do
         fun.()
       rescue
         e in DBConnection.ConnectionError ->  # <- adjust based on error type
-          e |> IO.inspect(label: "ConnectionError")
           if attempt == @max_retries do
             raise e
           else
