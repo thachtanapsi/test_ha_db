@@ -9,23 +9,25 @@ defmodule TestHaDb.Repo do
     def query_with_retry(fun, attempt \\ 1)
 
     def query_with_retry(fun, attempt) when attempt <= @max_retries do
-      try do
-        result = fun.()
-        if attempt > 1  do
-          MessageLogWriter.log("retry #{attempt} success #{inspect(result)}")
-        end
-        result
-      rescue
-        e in [DBConnection.ConnectionError, Postgrex.Error] ->  # <- adjust based on error type
+      case fun.() do
+        {:ok, result} ->
+          if attempt > 1  do
+            MessageLogWriter.log("retry #{attempt} success #{inspect(result)}")
+          end
+          result
+
+        {:error, %DBConnection.ConnectionError{}} = result ->
           if attempt == @max_retries do
-            raise e
+            MessageLogWriter.log(" --- max retries reached #{inspect(result)} --- ")
+            result
           else
             Process.sleep(@retry_delay)
             query_with_retry(fun, attempt + 1)
           end
 
-        e ->
-          MessageLogWriter.log("error name #{inspect(e)}")
+          result ->
+            MessageLogWriter.log(" --- other error #{inspect(result)} --- ")
+            result
       end
     end
 end

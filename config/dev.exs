@@ -4,7 +4,7 @@ config :test_ha_db, TestHaDb.Repo,
 username: "thachtan",
 password: "postgres",
 hostname: "localhost",
-database: "gx_open",
+database: "g_cash",
 stacktrace: true,
 show_sensitive_data_on_connection_error: true,
 pool_size: 2
