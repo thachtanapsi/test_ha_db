@@ -4,7 +4,7 @@ defmodule TestHaDb.Repo do
     adapter: Ecto.Adapters.Postgres
 
     @max_retries 10
-    @retry_delay 1000  # in ms
+    @retry_delay 5000  # in ms
 
     def query_with_retry(fun, attempt \\ 1)
 
