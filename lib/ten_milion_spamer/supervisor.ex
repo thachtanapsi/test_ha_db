@@ -31,7 +31,7 @@ defmodule TenMilionSpamer.Supervisor do
   def work() do
     # File.stream!(File.cwd!() <> "/message_binary_check.txt")
     # File.stream!(File.cwd!() <> "/message_binary_check_copy.txt")
-    1..1000000
+    1..5000000
     |> Stream.chunk_every(@num_child)
     |> Enum.each(fn batch ->
       batch
